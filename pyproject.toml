@@ -1,0 +1,116 @@
+# Basic pyproject.toml with hatch and hatch-vcs
+
+[build-system]
+requires = ["hatch", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+[project]
+name = "cool_project"
+dynamic = ["version"]
+description = "Cool Project"
+authors = [
+  { name="Hugo Herter", email="git@hugoherter.com" },
+]
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+keywords = ["cool", "project"]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+]
+dependencies = [
+  "requests>=2.32.3",
+  "typer>=0.12.5",
+]
+
+[project.urls]
+Source = "https://github.com/hoh/example-python-project"
+
+[project.scripts]
+cool = "cool_project.__main__:app"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/cool_project"]
+
+[tool.hatch.envs.default.scripts]
+
+[tool.hatch.envs.testing]
+type = "virtual"
+dependencies = [
+  "eth_typing",
+  "pytest",
+  "pytest-cov",
+  "pytest-mock",
+]
+
+[tool.hatch.envs.testing.scripts]
+test = [
+  "pytest --cov {args:tests}",
+  "coverage html",  # Generate HTML coverage report
+]
+
+[tool.hatch.envs.linting]
+detached = true
+dependencies = [
+  "black==24.3.0",
+  "mypy==1.8.0",
+  "ruff==0.4.6",
+  "isort==5.13.2",
+]
+
+[tool.hatch.envs.linting.scripts]
+# Check the code with black, isort, ruff and mypy
+check = [
+  # Black checks the code style
+  "black --check --diff {args:.}",
+  # Isort reorders the imports
+  "isort --check-only --profile black {args:.}",
+  # Ruff checks for common mistakes
+  "ruff  check {args:.}",
+  # Mypy checks the type annotations
+  "mypy {args:.}",
+]
+# Reformat the code with black, isort and ruff
+format = [
+  "black {args:.}",
+  "isort --profile black {args:.}",
+  "ruff check --fix {args:.}",
+]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "src"
+]
+testpaths = [
+  "tests"
+]
+
+[tool.black]
+target-version = ["py311"]
+line-length = 120
+
+[tool.mypy]
+python_version = "3.11"
+install_types = true
+non_interactive = true
+ignore_missing_imports = true
+explicit_package_bases = true
+check_untyped_defs = true
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.coverage.run]
+source_pkgs = ["cool_project", "tests"]
+
+#[tool.coverage.paths]
+#aleph_vm = ["src/cool_project"]
+#tests = ["tests", "*/aleph-vm/tests"]
