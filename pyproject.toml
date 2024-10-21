@@ -53,7 +53,7 @@ dependencies = [
 
 [tool.hatch.envs.testing.scripts]
 test = [
-  "pytest --cov {args:tests}",
+  "pytest --cov -m 'not networking' {args:tests}",
   "coverage html",  # Generate HTML coverage report
 ]
 
@@ -84,6 +84,9 @@ format = [
   "isort --profile black {args:.}",
   "ruff check --fix {args:.}",
 ]
+
+[tools.pytest.ini_options]
+markers = {networking = "mark test as requiring network requests"}
 
 [tool.pytest.ini_options]
 pythonpath = [

@@ -21,5 +21,11 @@ def do_sum(a: int, b: int):
         raise typer.BadParameter(str(e))
 
 
+@app.command()
+def weather(latitude: float, longitude: float):
+    """Display the weather for a specific geolocation."""
+    typer.echo(f"Getting weather for {latitude}, {longitude}...")
+
+
 if __name__ == "__main__":
     app()  # pragma: no cover
